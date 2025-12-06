@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Employee Form</title>
+<style>
+    body{
+        font-family: Arial;
+        width: 60%;
+        margin: auto;
+    }
+    .error{ color: red; margin-top: 10px; }
+    .success{ color: green; margin-top: 10px; }
+    .employee-box{
+        border: 1px solid #444;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+    button{
+        padding: 7px 12px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    input{
+        margin: 5px 0;
+        padding: 6px;
+        width: 100%;
+        border: 1px solid #888;
+        border-radius: 4px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Add Employee</h2>
+
+<label>Name</label>
+<input type="text" id="name">
+
+<label>Profession</label>
+<input type="text" id="profession">
+
+<label>Age</label>
+<input type="number" id="age">
+
+<button onclick="addEmployee()">Add User</button>
+
+<div id="message"></div>
+
+<h2>Added Employees</h2>
+<div id="employeeList"></div>
+
+<script>
+let employees = [];
+let idCounter = 1;
+
+function addEmployee() {
+    let name = document.getElementById("name").value.trim();
+    let profession = document.getElementById("profession").value.trim();
+    let age = document.getElementById("age").value.trim();
+    let messageBox = document.getElementById("message");
+
+    // Validation
+    if(name === "" || profession === "" || age === ""){
+        messageBox.innerHTML = "<p class='error'>Error: Please fill all fields!</p>";
+        return;
+    }
+
+    // Add object
+    let employee = {
+        id: idCounter++,
+        name: name,
+        profession: profession,
+        age: age
+    };
+
+    employees.push(employee);
+
+    messageBox.innerHTML = "<p class='success'>Success: Employee added!</p>";
+
+    displayEmployees();
+
+    // Clear inputs
+    document.getElementById("name").value = "";
+    document.getElementById("profession").value = "";
+    document.getElementById("age").value = "";
+}
+
+function deleteEmployee(id){
+    employees = employees.filter(emp => emp.id !== id);
+    displayEmployees();
+}
+
+function displayEmployees(){
+    let container = document.getElementById("employeeList");
+    container.innerHTML = "";
+
+    employees.map(emp => {
+        let div = document.createElement("div");
+        div.className = "employee-box";
+        div.innerHTML = `
+            <p><b>ID:</b> ${emp.id}</p>
+            <p><b>Name:</b> ${emp.name}</p>
+            <p><b>Profession:</b> ${emp.profession}</p>
+            <p><b>Age:</b> ${emp.age}</p>
+            <button onclick="deleteEmployee(${emp.id})">Delete</button>
+        `;
+        container.appendChild(div);
+    });
+}
+</script>
+
+</body>
+</html>
